@@ -1,0 +1,8 @@
+- module: system
+  period: 10m
+  metricsets:
+    - load 
+    - memory 
+    - process 
+    - fsstat 
+  processes: ['java']

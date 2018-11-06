@@ -1,0 +1,3 @@
+alert:
+- "command"
+command: ["python", "raise_github_issue.py", 'Monitoring issue', 'Issue Details', 'issue_raiser_id' ] # Issue raiser: 'issue_raiser_id'

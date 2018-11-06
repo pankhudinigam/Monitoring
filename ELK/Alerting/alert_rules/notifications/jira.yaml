@@ -1,0 +1,10 @@
+alert:
+- "jira"
+jira_server : "jira server's url"
+jira_project: "valid jira project name"
+jira_issuetype: "Bug"
+jira_account_file: "jira_acct.yaml"
+jira_component: "Valid JIRA Component name"
+jira_label: "Monitoring_JIRA_Test" # Valid JIRA label
+# Custom Orh=ganization fields
+jira_customfield_19111: "Custom field value"

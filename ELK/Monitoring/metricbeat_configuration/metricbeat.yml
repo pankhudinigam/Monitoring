@@ -1,0 +1,47 @@
+#==========================  Modules configuration ============================
+
+metricbeat.config.modules:
+  # Glob pattern for configuration loading
+  path: ${path.config}/modules.d/*.yml
+
+  # Set to true to enable config reloading
+  reload.enabled: true
+
+  # Period on which files under path should be checked for changes
+  reload.period: 10s
+
+#==================== Elasticsearch template setting ==========================
+#index: "{{es-index app identifier}}-%{+yyyy.MM.dd}"
+#setup.template.name: "{{es-index app identifier}}"
+#setup.template.pattern: "{{es-index app identifier}}-*"
+
+output.elasticsearch.index: "{{es-index app identifier}}-%{[beat.version]}-%{+yyyy.MM.dd}"
+setup.template.name: "{{es-index app identifier}}"
+setup.template.pattern: "{{es-index app identifier}}-*"
+#setup.dashboards.index: "{{es-index app identifier}}-*"
+
+setup.template.settings:
+  index.number_of_shards: 1
+  index.codec: best_compression
+  #_source.enabled: false
+
+#============================== Kibana =====================================
+
+# Starting with Beats version 6.0.0, the dashboards are loaded via the Kibana API.
+# This requires a Kibana endpoint configuration.
+setup.kibana:
+
+  # Kibana Host
+  # Scheme and port can be left out and will be set to the default (http and 5601)
+  # In case you specify and additional path, the scheme is required: http://localhost:5601/path
+  # IPv6 addresses should always be defined as: https://[2001:db8::1]:5601
+  host: "{{elk-host for your metricbeat data}}:5601"
+
+#================================ Outputs =====================================
+
+# Configure what output to use when sending the data collected by the beat.
+
+#-------------------------- Elasticsearch output ------------------------------
+output.elasticsearch:
+  # Array of hosts to connect to.
+  hosts: ["{{elk-host for your metricbeat data}}:9200"]

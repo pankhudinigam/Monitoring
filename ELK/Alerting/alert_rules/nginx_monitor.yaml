@@ -1,0 +1,26 @@
+es_host: {{elk-host for your metricbeat data}}
+es_port: 9200
+
+name: # Give a meaningful rule name. It can be descriptive with spaces and all. PS: this has to be unique, no 2 rules can have same name. #
+type: frequency # Send Alert when atleast one event occurs
+index: {{es-index app identifier}}*
+num_events: 1
+timeframe:
+    minutes: 15
+doc_type: process
+filter:
+- term:
+    metricset.module: "nginx"
+- wildcard:
+    error.message: "*error*"
+- term:
+    beat.hostname: # Hostname #
+alert:
+- "email"
+email: # List of alert receivers ex: ["pankhudinigam@gmail.com"]#
+smtp_host: # SMTP Host
+smtp_port: 25
+from_addr: "appMonitor@elastalert.com"
+alert_subject: "{{app_name}} {{env_name}}: {{Alert Subject}} {{0}}"
+alert_subject_args:
+- beat.hostname # 0th argument

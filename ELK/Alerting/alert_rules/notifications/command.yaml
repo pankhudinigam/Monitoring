@@ -1,0 +1,3 @@
+alert:
+- "command"
+command: ["mkdir", "dir_name"]

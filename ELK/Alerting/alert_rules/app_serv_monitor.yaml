@@ -1,0 +1,24 @@
+# This can be used for es process, app process, tomcat process etc. monitoring
+
+es_host: {{elk-host for your metricbeat data}}
+es_port: 9200
+
+name: # Give a meaningful rule name. It can be descriptive with spaces and all. PS: this has to be unique, no 2 rules can have same name. #
+type: flatline # Send alert when frequency less than the provided value
+index: {{es-index app identifier}}*
+threshold: 1
+timeframe:
+    minutes: x # {{check for rule every x minutes}} #
+doc_type: process
+filter:
+- wildcard:
+   system.process.cmdline: #Wildcard to identify your process using it's cmd footprint: ex: "*endpoint*service*"#
+- term:
+   beat.hostname: # Hostname for which this alert should be checked for #
+alert:
+- "email"
+email: # List of alert receivers ex: ["pankhudinigam@gmail.com"]#
+smtp_host: # SMTP Host
+smtp_port: 25
+from_addr: "appMonitor@elastalert.com"
+alert_subject: "{{app_name}} {{env_name}}: {{Alert Subject}}"

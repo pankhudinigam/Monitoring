@@ -1,0 +1,24 @@
+es_host: {{elk-host for your metricbeat data}}
+es_port: 9200
+
+name: # Give a meaningful rule name. It can be descriptive with spaces and all. PS: this has to be unique, no 2 rules can have same name. #
+type: flatline
+index: {{es-index app identifier}}*
+threshold: 1 # Altleast 1 time this process beat should be captured in timeframe amount of time interval
+timeframe:
+    minutes: 15
+doc_type: process
+filter:
+- term :
+   system.process.name : "java"
+- wildcard:
+   system.process.cmdline: "*elasticsearch*"
+- term:
+   beat.hostname: # Hostname for which this alert should be checked for #
+alert:
+- "email"
+email: # List of alert receivers ex: ["pankhudinigam@gmail.com"]#
+smtp_host: # SMTP Host
+smtp_port: 25
+from_addr: "appMonitor@elastalert.com"
+alert_subject: "{{app_name}} {{env_name}}: {{Alert Subject}}"

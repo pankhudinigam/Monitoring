@@ -1,0 +1,29 @@
+es_host: {{elk-host for your metricbeat data}}
+es_port: 9200
+
+name: # Give a meaningful rule name. It can be descriptive with spaces and all. PS: this has to be unique, no 2 rules can have same name. #
+type: metric_aggregation
+index: {{es-index app identifier}}*
+metric_agg_key: system.memory.actual.used.bytes
+metric_agg_type: avg
+max_threshold: system.memory.total * 0.7 # usage above 70% sends alert
+query_key: ["beat.hostname"] # sub aggregate based on this field.
+# Please Note: This one rule works for all hosts in that index, it aggregates host wise and tests condition against each sub-agg.
+
+doc_type: doc # Check for last buffer time data to see if this scenario occured #
+
+buffer_time:
+  minutes: 15
+
+filter:
+- term:
+   metricset.name: "memory"
+alert:
+- "email"
+email: # List of alert receivers ex: ["pankhudinigam@gmail.com"] #
+smtp_host: # SMTP Host
+smtp_port: 25
+from_addr: "appMonitor@elastalert.com"
+alert_subject: "{{app_name}} {{env_name}}: {{Alert Subject}} on host {{0}}"
+alert_subject_args:
+- beat.hostname # 0th argument
